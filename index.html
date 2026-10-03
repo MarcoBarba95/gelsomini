@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Gelsomino">
 <meta name="application-name" content="Il respiro del gelsomino">
-<meta name="theme-color" content="#03040a">
+<meta name="theme-color" content="#05060f">
 <meta name="color-scheme" content="dark">
 <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
 <title>Il respiro del gelsomino</title>
@@ -22,121 +22,375 @@
     --display: "Didot", "Bodoni 72", "Iowan Old Style", "Palatino", Georgia, serif;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   html, body {
-    width: 100vw; height: 100vh; overflow: hidden; touch-action: none; overscroll-behavior: none;
-    background: #000; color: #fff; -webkit-user-select: none; user-select: none;
-    -webkit-touch-callout: none; -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    touch-action: none;
+    overscroll-behavior: none;
+    background: #000;
+    color: #fff;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
   }
 
-  @supports (height: 100dvh) { html, body { height: 100dvh; } }
-  body { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+  @supports (height: 100dvh) {
+    html, body { height: 100dvh; }
+  }
 
-  canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+  body {
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+  }
+
   #bg { z-index: 0; }
   #scene { z-index: 1; }
 
-  #sleep-veil {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 2;
-    background: radial-gradient(circle at 50% 50%, rgba(2,3,8,0.2), rgba(0,0,2,0.8));
-    opacity: 0; transition: opacity 6s ease-in-out; pointer-events: none;
-  }
-  #sleep-veil.active { opacity: 1; }
-
   #intro {
-    position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 3;
-    display: flex; align-items: center; justify-content: center; text-align: center;
-    pointer-events: auto; padding: calc(24px + var(--safe-t)) 28px calc(24px + var(--safe-b));
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    pointer-events: none;
+    padding: calc(24px + var(--safe-t)) 28px calc(24px + var(--safe-b));
     transition: opacity 1.6s ease, filter 1.6s ease;
   }
-  #intro.out { opacity: 0; filter: blur(8px); pointer-events: none; }
 
-  .intro-inner { position: relative; }
+  #intro.out {
+    opacity: 0;
+    filter: blur(8px);
+  }
+
+  .intro-inner {
+    position: relative;
+  }
+
   .intro-inner::before {
-    content: ""; position: absolute; left: 50%; top: 72px; width: 300px; height: 300px;
-    margin: -150px 0 0 -150px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 238, 200, 0.08) 0%, rgba(255, 238, 200, 0.02) 40%, rgba(255, 238, 200, 0) 70%);
-    animation: halo 4.6s ease-in-out infinite; z-index: -1;
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 72px;
+    width: 300px;
+    height: 300px;
+    margin: -150px 0 0 -150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 238, 200, 0.07) 0%, rgba(255, 238, 200, 0.02) 40%, rgba(255, 238, 200, 0) 70%);
+    animation: halo 4.6s ease-in-out infinite;
+    z-index: -1;
   }
 
-  .intro-title { font-family: var(--display); font-size: 11px; letter-spacing: 0.38em; padding-left: 0.38em; text-transform: uppercase; color: rgba(236, 226, 200, 0.42); }
-  .intro-line { width: 36px; height: 1px; margin: 18px auto 20px; background: linear-gradient(90deg, rgba(255, 226, 170, 0), rgba(255, 226, 170, 0.5), rgba(255, 226, 170, 0)); }
-  .intro-cta { font-family: var(--display); font-style: italic; font-size: clamp(21px, 5.8vw, 28px); letter-spacing: 0.02em; color: #fff7e6; animation: breathe 4.6s ease-in-out infinite; }
+  .intro-title {
+    font-family: var(--display);
+    font-size: 11px;
+    letter-spacing: 0.38em;
+    padding-left: 0.38em;
+    text-transform: uppercase;
+    color: rgba(236, 226, 200, 0.42);
+  }
 
-  .guide { display: inline-flex; flex-direction: column; gap: 15px; margin-top: 52px; text-align: left; }
+  .intro-line {
+    width: 36px;
+    height: 1px;
+    margin: 18px auto 20px;
+    background: linear-gradient(90deg, rgba(255, 226, 170, 0), rgba(255, 226, 170, 0.5), rgba(255, 226, 170, 0));
+  }
+
+  .intro-cta {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(21px, 5.8vw, 28px);
+    letter-spacing: 0.02em;
+    color: #fff7e6;
+    animation: breathe 4.6s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(0.985);
+      text-shadow: 0 0 0 rgba(255, 236, 190, 0);
+    }
+    50% {
+      opacity: 0.95;
+      transform: scale(1);
+      text-shadow: 0 0 22px rgba(255, 236, 190, 0.45);
+    }
+  }
+
+  .guide {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 52px;
+    text-align: left;
+  }
+
   .guide-item {
-    display: flex; align-items: center; gap: 14px; font-family: var(--serif); font-style: italic;
-    font-size: 14px; line-height: 1.35; letter-spacing: 0.03em; color: rgba(240, 230, 210, 0.6);
-    opacity: 0; animation: guideIn 1.8s ease forwards;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.35;
+    letter-spacing: 0.03em;
+    color: rgba(240, 230, 210, 0.6);
+    opacity: 0;
+    animation: guideIn 1.8s ease forwards;
   }
+
   .guide-item:nth-child(1) { animation-delay: 1.4s; }
   .guide-item:nth-child(2) { animation-delay: 2.2s; }
-  .guide-item:nth-child(3) { animation-delay: 3.0s; }
-  .guide-item:nth-child(4) { animation-delay: 3.8s; }
+  .guide-item:nth-child(3) { animation-delay: 3s; }
 
-  @keyframes guideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes guideIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-  .g-ico { position: relative; flex: 0 0 26px; width: 26px; height: 18px; }
-  .g-tap::before, .g-tap::after { content: ""; position: absolute; left: 50%; top: 50%; border-radius: 50%; }
-  .g-tap::before { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; background: rgba(255, 236, 200, 0.8); box-shadow: 0 0 8px rgba(255, 236, 200, 0.6); }
-  .g-tap::after { width: 16px; height: 16px; margin: -8px 0 0 -8px; border: 1px solid rgba(255, 236, 200, 0.5); animation: ripple 2.6s ease-out infinite; }
-  
-  .g-drag::before { content: ""; position: absolute; left: 1px; right: 1px; top: 50%; height: 1px; background: linear-gradient(90deg, rgba(255, 214, 140, 0), rgba(255, 214, 140, 0.55)); }
-  .g-drag::after { content: ""; position: absolute; left: 0; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%; background: rgba(255, 236, 200, 0.85); box-shadow: 0 0 8px rgba(255, 220, 160, 0.7); animation: glide 2.6s ease-in-out infinite; }
-  
-  .g-tilt::before { content: ""; position: absolute; left: 5px; top: 2px; width: 14px; height: 14px; border: 1px solid rgba(255,236,200,0.4); border-radius: 3px; animation: tilt 3s ease-in-out infinite; }
-  .g-hold::before { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: radial-gradient(circle, rgba(255,236,200,0.8), transparent); animation: holdBreathe 3s ease-in-out infinite; }
+  .g-ico {
+    position: relative;
+    flex: 0 0 26px;
+    width: 26px;
+    height: 18px;
+  }
 
-  @keyframes ripple { 0% { transform: scale(0.3); opacity: 0.9; } 70%, 100% { transform: scale(1.2); opacity: 0; } }
-  @keyframes glide { 0% { transform: translateX(0); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(21px); opacity: 0; } }
-  @keyframes tilt { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(15deg); } 75% { transform: rotate(-15deg); } }
-  @keyframes holdBreathe { 0%, 100% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 10px rgba(255,236,200,0.6); } }
+  .g-tap::before,
+  .g-tap::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 50%;
+  }
 
-  @keyframes breathe { 0%, 100% { opacity: 0.3; transform: scale(0.985); text-shadow: 0 0 0 rgba(255, 236, 190, 0); } 50% { opacity: 0.95; transform: scale(1); text-shadow: 0 0 22px rgba(255, 236, 190, 0.45); } }
-  @keyframes halo { 0%, 100% { opacity: 0.4; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.06); } }
+  .g-tap::before {
+    width: 5px;
+    height: 5px;
+    margin: -2.5px 0 0 -2.5px;
+    background: rgba(255, 236, 200, 0.8);
+    box-shadow: 0 0 8px rgba(255, 236, 200, 0.6);
+  }
+
+  .g-tap::after {
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 1px solid rgba(255, 236, 200, 0.5);
+    animation: ripple 2.6s ease-out infinite;
+  }
+
+  @keyframes ripple {
+    0% { transform: scale(0.3); opacity: 0.9; }
+    70%, 100% { transform: scale(1.2); opacity: 0; }
+  }
+
+  .g-drag::before {
+    content: "";
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 214, 140, 0), rgba(255, 214, 140, 0.55));
+  }
+
+  .g-drag::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    margin-top: -2.5px;
+    border-radius: 50%;
+    background: rgba(255, 236, 200, 0.85);
+    box-shadow: 0 0 8px rgba(255, 220, 160, 0.7);
+    animation: glide 2.6s ease-in-out infinite;
+  }
+
+  @keyframes glide {
+    0% { transform: translateX(0); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateX(21px); opacity: 0; }
+  }
+
+  .g-star::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    margin: -2px 0 0 -2px;
+    border-radius: 50%;
+    background: #fff6e2;
+    box-shadow: 0 0 6px 2px rgba(255, 236, 200, 0.45), 0 0 14px 4px rgba(255, 226, 170, 0.15);
+    animation: sparkle 3.2s ease-in-out infinite;
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 0.35; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  @keyframes halo {
+    0%, 100% { opacity: 0.4; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.06); }
+  }
 
   #hint {
-    position: fixed; left: 0; right: 0; bottom: calc(30px + var(--safe-b)); z-index: 3;
-    padding: 0 24px; text-align: center; font-family: var(--serif); font-style: italic; font-size: 13px;
-    letter-spacing: 0.05em; color: rgba(240, 230, 210, 0.5); opacity: 0; transition: opacity 2.2s ease; pointer-events: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(30px + var(--safe-b));
+    z-index: 3;
+    padding: 0 24px;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    color: rgba(240, 230, 210, 0.5);
+    opacity: 0;
+    transition: opacity 2.2s ease;
+    pointer-events: none;
   }
+
   #hint.show { opacity: 1; }
 
   #card {
-    position: fixed; left: 50%; top: 50%; z-index: 4; width: min(78vw, 320px); max-height: calc(100% - 40px - var(--safe-t) - var(--safe-b));
-    overflow: hidden; padding: 24px 24px 22px; border-radius: 26px; text-align: center;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 4;
+    width: min(78vw, 320px);
+    max-height: calc(100% - 40px - var(--safe-t) - var(--safe-b));
+    overflow: hidden;
+    padding: 24px 24px 22px;
+    border-radius: 26px;
+    text-align: center;
     background: linear-gradient(150deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.035) 60%, rgba(255, 240, 210, 0.05));
-    border: 1px solid rgba(255, 255, 255, 0.14); box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 60px rgba(255, 236, 190, 0.06);
-    -webkit-backdrop-filter: blur(18px) saturate(140%); backdrop-filter: blur(18px) saturate(140%);
-    opacity: 0; visibility: hidden; pointer-events: none; transform: translate(-50%, -46%) scale(0.96);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 60px rgba(255, 236, 190, 0.06);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, -46%) scale(0.96);
     transition: opacity 1.6s ease, transform 2s cubic-bezier(.16, .84, .24, 1), visibility 0s linear 2s;
   }
-  #card.show { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, -50%) scale(1); transition: opacity 1.8s ease, transform 2s cubic-bezier(.16, .84, .24, 1), visibility 0s; }
 
-  #cardFlower { position: static; width: 60px; height: 60px; margin: -4px auto 12px; animation: turn 60s linear infinite; }
-  @keyframes turn { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  #card.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+    transition: opacity 1.8s ease, transform 2s cubic-bezier(.16, .84, .24, 1), visibility 0s;
+  }
 
-  .dedica { font-family: var(--serif); font-style: italic; font-size: clamp(16px, 4.4vw, 19px); line-height: 1.55; letter-spacing: 0.01em; color: rgba(255, 250, 238, 0.9); text-shadow: 0 0 18px rgba(255, 236, 190, 0.18); }
-  .dedica .first { display: block; margin-bottom: 10px; font-family: var(--display); font-size: 1.22em; color: #fff8e8; }
-  .sep { width: 40px; height: 1px; margin: 20px auto 18px; background: linear-gradient(90deg, rgba(255, 222, 160, 0), rgba(255, 222, 160, 0.55), rgba(255, 222, 160, 0)); }
+  #cardFlower {
+    position: static;
+    width: 60px;
+    height: 60px;
+    margin: -4px auto 12px;
+    animation: turn 60s linear infinite;
+  }
+
+  @keyframes turn {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .dedica {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(16px, 4.4vw, 19px);
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+    color: rgba(255, 250, 238, 0.9);
+    text-shadow: 0 0 18px rgba(255, 236, 190, 0.18);
+  }
+
+  .dedica .first {
+    display: block;
+    margin-bottom: 10px;
+    font-family: var(--display);
+    font-size: 1.22em;
+    color: #fff8e8;
+  }
+
+  .sep {
+    width: 40px;
+    height: 1px;
+    margin: 20px auto 18px;
+    background: linear-gradient(90deg, rgba(255, 222, 160, 0), rgba(255, 222, 160, 0.55), rgba(255, 222, 160, 0));
+  }
 
   #continua {
-    -webkit-appearance: none; appearance: none; font-family: var(--serif); font-style: italic; font-size: 14px; letter-spacing: 0.05em;
-    color: rgba(255, 240, 214, 0.86); background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 230, 190, 0.24); border-radius: 999px;
-    padding: 12px 22px; min-height: 44px; cursor: pointer; touch-action: manipulation; transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+    -webkit-appearance: none;
+    appearance: none;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    color: rgba(255, 240, 214, 0.86);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 230, 190, 0.24);
+    border-radius: 999px;
+    padding: 12px 22px;
+    min-height: 44px;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
   }
-  #continua:active { background: rgba(255, 236, 200, 0.12); border-color: rgba(255, 230, 190, 0.45); color: #fff6e4; }
-  #continua:focus-visible { outline: 1px solid rgba(255, 230, 190, 0.6); outline-offset: 3px; }
 
-  @media (prefers-reduced-motion: reduce) { .intro-cta, .intro-inner::before { animation-duration: 9s; } #cardFlower { animation: none; } }
+  #continua:active {
+    background: rgba(255, 236, 200, 0.12);
+    border-color: rgba(255, 230, 190, 0.45);
+    color: #fff6e4;
+  }
+
+  #continua:focus-visible {
+    outline: 1px solid rgba(255, 230, 190, 0.6);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .intro-cta, .intro-inner::before { animation-duration: 9s; }
+    #cardFlower { animation: none; }
+  }
 </style>
 </head>
 <body>
   <canvas id="bg" aria-hidden="true"></canvas>
   <canvas id="scene" role="img" aria-label="Un cielo notturno dove sbocciano e fluttuano gelsomini luminosi"></canvas>
-  <div id="sleep-veil"></div>
 
   <div id="intro">
     <div class="intro-inner">
@@ -146,13 +400,12 @@
       <div class="guide" aria-label="Piccola guida">
         <div class="guide-item"><span class="g-ico g-tap" aria-hidden="true"></span><span>tocca per far sbocciare un gelsomino</span></div>
         <div class="guide-item"><span class="g-ico g-drag" aria-hidden="true"></span><span>muovi il dito per far soffiare la brezza</span></div>
-        <div class="guide-item"><span class="g-ico g-tilt" aria-hidden="true"></span><span>inclina per farli scivolare nel buio</span></div>
-        <div class="guide-item"><span class="g-ico g-hold" aria-hidden="true"></span><span>tieni premuto per trattenere il respiro</span></div>
+        <div class="guide-item"><span class="g-ico g-star" aria-hidden="true"></span><span>e lascia che la notte ti sorprenda</span></div>
       </div>
     </div>
   </div>
 
-  <div id="hint">ora prova a muovere il dito o inclinare il telefono</div>
+  <div id="hint">ora prova a muovere il dito sullo schermo</div>
 
   <div id="card" role="dialog" aria-hidden="true" aria-label="Dedica">
     <canvas id="cardFlower" aria-hidden="true"></canvas>
@@ -178,7 +431,6 @@
   var cardEl = document.getElementById('card');
   var cardBtn = document.getElementById('continua');
   var cardFlowerCanvas = document.getElementById('cardFlower');
-  var sleepVeil = document.getElementById('sleep-veil');
 
   var W = 0, H = 0, DPR = 1;
   var baseSize = 36;
@@ -191,43 +443,43 @@
   var cAlpha = 0;
   var totalBlooms = 0;
   var eggAuto = false;
-  
+  var lastCenterTap = null;
+  var cardTimer = 0;
+  var hintTimers = [];
+  var twinkles = [];
+
   var flowers = [];
   var particles = [];
-  var fireflies = [];
-  var loosePetals = [];
   var MAX_FLOWERS = 36;
   var MAX_PARTICLES = 650;
   var TAP_SLOP = 12;
-
-  // Interactivity state
-  var gx = 0, gy = 0; // Gyroscope drift
-  var pointers = {};
-  var isHolding = false;
-  var holdCenter = {x: 0, y: 0};
-  var holdTension = 0; // 0 to 1
-  var lastUserAction = 0;
-  var isSleeping = false;
-  var moonPhase = 0;
 
   function rand(a, b) { return a + Math.random() * (b - a); }
   function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
 
   function mulberry32(seed) {
     return function () {
-      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      seed |= 0;
+      seed = (seed + 0x6D2B79F5) | 0;
       var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
   }
-  function makeCanvas(w, h) { var c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+
+  function makeCanvas(w, h) {
+    var c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    return c;
+  }
 
   /* ---------- Sprite procedurali ---------- */
+
   var SPRITE = 256;
   var SPRITE_R = SPRITE * 0.34;
-  
-  function renderFlower(seed, singlePetal) {
+
+  function renderFlower(seed) {
     var c = makeCanvas(SPRITE, SPRITE);
     var g = c.getContext('2d');
     var r = mulberry32(seed);
@@ -235,19 +487,18 @@
 
     g.translate(SPRITE / 2, SPRITE / 2);
 
-    if (!singlePetal) {
-      var halo = g.createRadialGradient(0, 0, R * 0.15, 0, 0, SPRITE / 2);
-      halo.addColorStop(0, 'rgba(255, 248, 228, 0.28)');
-      halo.addColorStop(0.5, 'rgba(255, 244, 215, 0.08)');
-      halo.addColorStop(1, 'rgba(255, 244, 215, 0)');
-      g.fillStyle = halo; g.beginPath(); g.arc(0, 0, SPRITE / 2, 0, TAU); g.fill();
-    }
+    var halo = g.createRadialGradient(0, 0, R * 0.15, 0, 0, SPRITE / 2);
+    halo.addColorStop(0, 'rgba(255, 248, 228, 0.28)');
+    halo.addColorStop(0.5, 'rgba(255, 244, 215, 0.08)');
+    halo.addColorStop(1, 'rgba(255, 244, 215, 0)');
+    g.fillStyle = halo;
+    g.beginPath();
+    g.arc(0, 0, SPRITE / 2, 0, TAU);
+    g.fill();
 
     var base = r() * TAU;
-    var numPetals = singlePetal ? 1 : 5;
-    
-    for (var i = 0; i < numPetals; i++) {
-      var a = base + (singlePetal ? 0 : i * TAU / 5) + (r() - 0.5) * 0.12;
+    for (var i = 0; i < 5; i++) {
+      var a = base + i * TAU / 5 + (r() - 0.5) * 0.12;
       var L = R * (0.9 + r() * 0.12);
       var Wd = R * (0.34 + r() * 0.08);
       var tw = R * (0.08 + r() * 0.06);
@@ -262,15 +513,18 @@
       p.closePath();
 
       var pg = g.createRadialGradient(0, 0, 0, 0, 0, L);
-      pg.addColorStop(0, '#f2dc9a'); pg.addColorStop(0.16, '#fbefcc');
-      pg.addColorStop(0.42, '#fffcf2'); pg.addColorStop(0.85, '#fffaf0'); pg.addColorStop(1, '#efe8da');
+      pg.addColorStop(0, '#f2dc9a');
+      pg.addColorStop(0.16, '#fbefcc');
+      pg.addColorStop(0.42, '#fffcf2');
+      pg.addColorStop(0.85, '#fffaf0');
+      pg.addColorStop(1, '#efe8da');
 
-      if (!singlePetal) {
-        g.shadowColor = 'rgba(255, 247, 222, 0.55)';
-        g.shadowBlur = SPRITE * 0.05;
-      }
-      g.fillStyle = pg; g.fill(p);
-      g.shadowBlur = 0; g.shadowColor = 'rgba(0, 0, 0, 0)';
+      g.shadowColor = 'rgba(255, 247, 222, 0.55)';
+      g.shadowBlur = SPRITE * 0.05;
+      g.fillStyle = pg;
+      g.fill(p);
+      g.shadowBlur = 0;
+      g.shadowColor = 'rgba(0, 0, 0, 0)';
 
       g.save();
       g.clip(p);
@@ -278,174 +532,232 @@
       sg.addColorStop(0, 'rgba(196, 184, 160, 0.28)');
       sg.addColorStop(0.45, 'rgba(255, 255, 255, 0)');
       sg.addColorStop(1, 'rgba(255, 255, 255, 0.12)');
-      g.fillStyle = sg; g.fillRect(-Wd * 1.3, -L * 1.05, Wd * 2.6, L * 1.1);
-      
-      // Dew drop
-      if (r() > 0.5) {
-         g.fillStyle = 'rgba(255,255,255,0.7)';
-         g.beginPath();
-         g.arc(tw*0.5, -L*0.6, R*0.04, 0, TAU);
-         g.fill();
-         g.fillStyle = 'rgba(255,255,255,0.9)';
-         g.beginPath();
-         g.arc(tw*0.5 - R*0.01, -L*0.6 - R*0.01, R*0.015, 0, TAU);
-         g.fill();
-      }
+      g.fillStyle = sg;
+      g.fillRect(-Wd * 1.3, -L * 1.05, Wd * 2.6, L * 1.1);
       g.restore();
 
       g.lineCap = 'round';
-      g.strokeStyle = 'rgba(214, 200, 170, 0.32)'; g.lineWidth = SPRITE * 0.005;
-      g.beginPath(); g.moveTo(0, -R * 0.16); g.quadraticCurveTo(Wd * 0.12, -L * 0.55, tw * 0.85, -L * 0.9); g.stroke();
-      g.strokeStyle = 'rgba(225, 214, 192, 0.45)'; g.lineWidth = SPRITE * 0.003; g.stroke(p);
+      g.strokeStyle = 'rgba(214, 200, 170, 0.32)';
+      g.lineWidth = SPRITE * 0.005;
+      g.beginPath();
+      g.moveTo(0, -R * 0.16);
+      g.quadraticCurveTo(Wd * 0.12, -L * 0.55, tw * 0.85, -L * 0.9);
+      g.stroke();
+
+      g.strokeStyle = 'rgba(225, 214, 192, 0.45)';
+      g.lineWidth = SPRITE * 0.003;
+      g.stroke(p);
+
       g.restore();
     }
 
-    if (!singlePetal) {
-      var cg = g.createRadialGradient(0, 0, 0, 0, 0, R * 0.26);
-      cg.addColorStop(0, 'rgba(196, 148, 52, 0.95)'); cg.addColorStop(0.25, 'rgba(232, 192, 100, 0.9)');
-      cg.addColorStop(0.6, 'rgba(248, 226, 165, 0.45)'); cg.addColorStop(1, 'rgba(255, 244, 214, 0)');
-      g.fillStyle = cg; g.beginPath(); g.arc(0, 0, R * 0.26, 0, TAU); g.fill();
-      g.fillStyle = 'rgba(150, 108, 40, 0.55)'; g.beginPath(); g.arc(0, 0, R * 0.035, 0, TAU); g.fill();
-      g.fillStyle = 'rgba(238, 200, 105, 0.95)';
-      for (var k = 0; k < 2; k++) {
-        var aa = base + k * Math.PI + 0.6;
-        g.beginPath(); g.arc(Math.cos(aa) * R * 0.06, Math.sin(aa) * R * 0.06, R * 0.028, 0, TAU); g.fill();
-      }
+    var cg = g.createRadialGradient(0, 0, 0, 0, 0, R * 0.26);
+    cg.addColorStop(0, 'rgba(196, 148, 52, 0.95)');
+    cg.addColorStop(0.25, 'rgba(232, 192, 100, 0.9)');
+    cg.addColorStop(0.6, 'rgba(248, 226, 165, 0.45)');
+    cg.addColorStop(1, 'rgba(255, 244, 214, 0)');
+    g.fillStyle = cg;
+    g.beginPath();
+    g.arc(0, 0, R * 0.26, 0, TAU);
+    g.fill();
+
+    g.fillStyle = 'rgba(150, 108, 40, 0.55)';
+    g.beginPath();
+    g.arc(0, 0, R * 0.035, 0, TAU);
+    g.fill();
+
+    g.fillStyle = 'rgba(238, 200, 105, 0.95)';
+    for (var k = 0; k < 2; k++) {
+      var aa = base + k * Math.PI + 0.6;
+      g.beginPath();
+      g.arc(Math.cos(aa) * R * 0.06, Math.sin(aa) * R * 0.06, R * 0.028, 0, TAU);
+      g.fill();
     }
+
     return c;
   }
 
   function renderDot(stops, size) {
-    var c = makeCanvas(size, size); var g = c.getContext('2d'); var h = size / 2;
+    var c = makeCanvas(size, size);
+    var g = c.getContext('2d');
+    var h = size / 2;
     var grad = g.createRadialGradient(h, h, 0, h, h, h);
     for (var i = 0; i < stops.length; i++) grad.addColorStop(stops[i][0], stops[i][1]);
-    g.fillStyle = grad; g.fillRect(0, 0, size, size);
+    g.fillStyle = grad;
+    g.fillRect(0, 0, size, size);
     return c;
   }
 
-  var flowerSprites = [renderFlower(7, false), renderFlower(21, false), renderFlower(42, false)];
-  var petalSprite = renderFlower(88, true);
+  var flowerSprites = [renderFlower(7), renderFlower(21), renderFlower(42)];
 
-  var glowSprite = renderDot([[0, 'rgba(255, 246, 220, 0.6)'], [0.25, 'rgba(255, 238, 200, 0.22)'], [0.6, 'rgba(255, 230, 190, 0.06)'], [1, 'rgba(255, 230, 190, 0)']], 128);
-  var goldDot = renderDot([[0, 'rgba(255, 244, 210, 1)'], [0.18, 'rgba(255, 214, 130, 0.75)'], [0.45, 'rgba(240, 180, 90, 0.18)'], [1, 'rgba(240, 180, 90, 0)']], 64);
-  var pearlDot = renderDot([[0, 'rgba(255, 255, 255, 1)'], [0.2, 'rgba(240, 238, 255, 0.7)'], [0.5, 'rgba(210, 214, 255, 0.14)'], [1, 'rgba(210, 214, 255, 0)']], 64);
-  var fireflyDot = renderDot([[0, 'rgba(255, 255, 200, 1)'], [0.2, 'rgba(180, 255, 100, 0.6)'], [0.5, 'rgba(100, 200, 50, 0.1)'], [1, 'rgba(100, 200, 50, 0)']], 64);
+  var glowSprite = renderDot([
+    [0, 'rgba(255, 246, 220, 0.6)'],
+    [0.25, 'rgba(255, 238, 200, 0.22)'],
+    [0.6, 'rgba(255, 230, 190, 0.06)'],
+    [1, 'rgba(255, 230, 190, 0)']
+  ], 128);
 
-  /* ---------- Sfondo e Luna ---------- */
-  var bgGradient, nebulaCanvas;
+  var goldDot = renderDot([
+    [0, 'rgba(255, 244, 210, 1)'],
+    [0.18, 'rgba(255, 214, 130, 0.75)'],
+    [0.45, 'rgba(240, 180, 90, 0.18)'],
+    [1, 'rgba(240, 180, 90, 0)']
+  ], 64);
+
+  var pearlDot = renderDot([
+    [0, 'rgba(255, 255, 255, 1)'],
+    [0.2, 'rgba(240, 238, 255, 0.7)'],
+    [0.5, 'rgba(210, 214, 255, 0.14)'],
+    [1, 'rgba(210, 214, 255, 0)']
+  ], 64);
+
+  /* ---------- Sfondo notturno ---------- */
+
   function drawBackground() {
     var w = bgCanvas.width, h = bgCanvas.height;
     bctx.setTransform(1, 0, 0, 1, 0, 0);
 
-    // Deep night gradient
     var cx = w * 0.5, cy = h * 0.42;
     var rad = Math.sqrt(w * w + h * h) * 0.72;
     var g = bctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
-    g.addColorStop(0, '#1c2052'); g.addColorStop(0.28, '#141640');
-    g.addColorStop(0.58, '#0a0b24'); g.addColorStop(0.82, '#03040a'); g.addColorStop(1, '#000000');
-    bctx.fillStyle = g; bctx.fillRect(0, 0, w, h);
+    g.addColorStop(0, '#1c2052');
+    g.addColorStop(0.28, '#141640');
+    g.addColorStop(0.58, '#0a0b24');
+    g.addColorStop(0.82, '#04050f');
+    g.addColorStop(1, '#000000');
+    bctx.fillStyle = g;
+    bctx.fillRect(0, 0, w, h);
 
-    // Nebula dust
     var m = Math.max(w, h);
     var n1 = bctx.createRadialGradient(w * 0.8, h * 0.16, 0, w * 0.8, h * 0.16, m * 0.55);
-    n1.addColorStop(0, 'rgba(88, 64, 150, 0.15)'); n1.addColorStop(1, 'rgba(88, 64, 150, 0)');
-    bctx.fillStyle = n1; bctx.fillRect(0, 0, w, h);
+    n1.addColorStop(0, 'rgba(88, 64, 150, 0.13)');
+    n1.addColorStop(1, 'rgba(88, 64, 150, 0)');
+    bctx.fillStyle = n1;
+    bctx.fillRect(0, 0, w, h);
 
     var n2 = bctx.createRadialGradient(w * 0.14, h * 0.86, 0, w * 0.14, h * 0.86, m * 0.5);
-    n2.addColorStop(0, 'rgba(40, 70, 140, 0.12)'); n2.addColorStop(1, 'rgba(40, 70, 140, 0)');
-    bctx.fillStyle = n2; bctx.fillRect(0, 0, w, h);
+    n2.addColorStop(0, 'rgba(40, 70, 140, 0.10)');
+    n2.addColorStop(1, 'rgba(40, 70, 140, 0)');
+    bctx.fillStyle = n2;
+    bctx.fillRect(0, 0, w, h);
 
-    // Moon Crescent
-    var mx = w * 0.85, my = h * 0.15;
-    var mr = m * 0.08;
-    bctx.beginPath();
-    bctx.arc(mx, my, mr, 0, TAU);
-    bctx.fillStyle = 'rgba(255, 250, 240, 0.08)';
-    bctx.shadowBlur = 40; bctx.shadowColor = 'rgba(200, 220, 255, 0.4)';
-    bctx.fill();
-    bctx.shadowBlur = 0;
-    
-    // Crescent mask
-    bctx.globalCompositeOperation = 'destination-out';
-    bctx.beginPath();
-    bctx.arc(mx - mr*0.25, my - mr*0.15, mr*0.95, 0, TAU);
-    bctx.fill();
-    bctx.globalCompositeOperation = 'source-over';
-    
-    // Moon glow
-    var mg = bctx.createRadialGradient(mx, my, 0, mx, my, mr*3);
-    mg.addColorStop(0, 'rgba(255,255,255,0.06)'); mg.addColorStop(1, 'rgba(255,255,255,0)');
-    bctx.fillStyle = mg; bctx.beginPath(); bctx.arc(mx, my, mr*3, 0, TAU); bctx.fill();
-
-    // Noise
     try {
-      var img = bctx.getImageData(0, 0, w, h); var d = img.data;
+      var img = bctx.getImageData(0, 0, w, h);
+      var d = img.data;
       for (var i = 0; i < d.length; i += 4) {
-        var nz = (Math.random() - 0.5) * 4;
-        d[i] += nz; d[i + 1] += nz; d[i + 2] += nz;
+        var nz = (Math.random() - 0.5) * 3;
+        d[i] += nz;
+        d[i + 1] += nz;
+        d[i + 2] += nz;
       }
       bctx.putImageData(img, 0, 0);
-    } catch (e) {}
+    } catch (e) { /* dithering opzionale */ }
 
-    // Stars
     var count = Math.round((W * H) / 2600);
     for (var s = 0; s < count; s++) {
-      var x = Math.random() * w, y = Math.random() * h;
+      var x = Math.random() * w;
+      var y = Math.random() * h;
       var r = rand(0.25, 0.85) * DPR;
       var a = Math.pow(Math.random(), 2) * 0.34 + 0.04;
-      bctx.fillStyle = Math.random() < 0.3 ? 'rgba(255, 240, 215, ' + a + ')' : 'rgba(215, 222, 255, ' + a + ')';
-      bctx.beginPath(); bctx.arc(x, y, r, 0, TAU); bctx.fill();
+      var warm = Math.random() < 0.3;
+      bctx.fillStyle = warm ? 'rgba(255, 240, 215, ' + a + ')' : 'rgba(215, 222, 255, ' + a + ')';
+      bctx.beginPath();
+      bctx.arc(x, y, r, 0, TAU);
+      bctx.fill();
+    }
+
+    twinkles = [];
+    for (var t = 0; t < 16; t++) {
+      twinkles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: rand(0.6, 1.1),
+        a: rand(0.18, 0.4),
+        ph: rand(0, TAU),
+        sp: rand(0.4, 1.3)
+      });
     }
   }
 
   function resize() {
-    W = window.innerWidth; H = window.innerHeight; DPR = Math.min(window.devicePixelRatio || 1, 2);
-    bgCanvas.width = Math.round(W * DPR); bgCanvas.height = Math.round(H * DPR);
-    canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
-    ctx.imageSmoothingEnabled = true; if ('imageSmoothingQuality' in ctx) ctx.imageSmoothingQuality = 'high';
+    W = window.innerWidth;
+    H = window.innerHeight;
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    bgCanvas.width = Math.round(W * DPR);
+    bgCanvas.height = Math.round(H * DPR);
+    canvas.width = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.imageSmoothingEnabled = true;
+    if ('imageSmoothingQuality' in ctx) ctx.imageSmoothingQuality = 'high';
     baseSize = clamp(Math.min(W, H) * 0.095, 26, 54);
     drawBackground();
+    for (var i = 0; i < flowers.length; i++) {
+      flowers[i].x = clamp(flowers[i].x, 0, W);
+      flowers[i].y = clamp(flowers[i].y, 0, H);
+    }
   }
 
   function makeAppleIcon() {
     try {
-      var c = makeCanvas(180, 180); var g = c.getContext('2d');
+      var c = makeCanvas(180, 180);
+      var g = c.getContext('2d');
       var bgG = g.createRadialGradient(90, 80, 0, 90, 90, 130);
-      bgG.addColorStop(0, '#1d2156'); bgG.addColorStop(0.55, '#0b0c26'); bgG.addColorStop(1, '#020208');
-      g.fillStyle = bgG; g.fillRect(0, 0, 180, 180);
-      var s = SPRITE * (58 / SPRITE_R);
+      bgG.addColorStop(0, '#1d2156');
+      bgG.addColorStop(0.55, '#0b0c26');
+      bgG.addColorStop(1, '#020208');
+      g.fillStyle = bgG;
+      g.fillRect(0, 0, 180, 180);
+      var k = 58 / SPRITE_R;
+      var s = SPRITE * k;
       g.drawImage(flowerSprites[0], 90 - s / 2, 90 - s / 2, s, s);
       document.getElementById('appleIcon').setAttribute('href', c.toDataURL('image/png'));
-    } catch (e) {}
+    } catch (e) { /* icona opzionale */ }
   }
 
   function drawCardFlower() {
-    var d = Math.min(window.devicePixelRatio || 1, 3); var css = 60;
-    cardFlowerCanvas.width = Math.round(css * d); cardFlowerCanvas.height = Math.round(css * d);
+    var d = Math.min(window.devicePixelRatio || 1, 3);
+    var css = 60;
+    cardFlowerCanvas.width = Math.round(css * d);
+    cardFlowerCanvas.height = Math.round(css * d);
     var g = cardFlowerCanvas.getContext('2d');
-    var s = SPRITE * ((css * 0.32 * d) / SPRITE_R);
+    g.clearRect(0, 0, cardFlowerCanvas.width, cardFlowerCanvas.height);
+    var k = (css * 0.32 * d) / SPRITE_R;
+    var s = SPRITE * k;
     g.drawImage(flowerSprites[1], (cardFlowerCanvas.width - s) / 2, (cardFlowerCanvas.height - s) / 2, s, s);
   }
 
   /* ---------- Audio generativo ---------- */
-  var actx = null, bus = null, panSupported = false;
-  var padGain = null, windGain = null, windFilter = null, windLevel = 0, lastWindSet = 0;
-  var cricketsGain = null;
-  var lastChime = 0, silentPlayed = false;
+
+  var actx = null;
+  var bus = null;
+  var panSupported = false;
+  var padGain = null;
+  var windGain = null;
+  var windFilter = null;
+  var windLevel = 0;
+  var lastWindSet = 0;
+  var lastChime = 0;
+  var silentPlayed = false;
 
   var BLOOM_NOTES = [246.94, 293.66, 329.63, 392.00, 440.00, 493.88, 587.33, 659.25];
-  var CHIME_NOTES = [659.25, 783.99, 880.00, 987.77, 1174.66, 1318.51];
+  var HIGH_NOTES = [659.25, 783.99, 880.00, 987.77, 1174.66, 1318.51];
   var ARP_UP = [329.63, 392.00, 440.00, 493.88, 587.33, 659.25, 987.77];
   var ARP_DOWN = [659.25, 587.33, 493.88, 392.00, 329.63];
 
   function makeImpulse(seconds, decay) {
-    var rate = actx.sampleRate, len = Math.floor(rate * seconds), buf = actx.createBuffer(2, len, rate);
+    var rate = actx.sampleRate;
+    var len = Math.floor(rate * seconds);
+    var buf = actx.createBuffer(2, len, rate);
     for (var ch = 0; ch < 2; ch++) {
-      var d = buf.getChannelData(ch), y = 0;
+      var d = buf.getChannelData(ch);
+      var y = 0;
       for (var i = 0; i < len; i++) {
-        var t = i / len, x = (Math.random() * 2 - 1) * Math.pow(1 - t, decay);
-        var a = 0.6 - 0.48 * t; y += a * (x - y);
-        d[i] = y * (i < rate * 0.006 ? i / (rate * 0.006) : 1);
+        var t = i / len;
+        var x = (Math.random() * 2 - 1) * Math.pow(1 - t, decay);
+        var a = 0.6 - 0.48 * t;
+        y += a * (x - y);
+        var fadeIn = i < rate * 0.006 ? i / (rate * 0.006) : 1;
+        d[i] = y * fadeIn;
       }
     }
     return buf;
@@ -454,23 +766,49 @@
   function initAudio() {
     var AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
-    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+    try {
+      if (navigator.audioSession) navigator.audioSession.type = 'playback';
+    } catch (e) { /* non supportato */ }
+
     actx = new AC();
 
     var comp = actx.createDynamicsCompressor();
-    comp.threshold.value = -20; comp.knee.value = 15; comp.ratio.value = 4; comp.attack.value = 0.01; comp.release.value = 0.3;
+    comp.threshold.value = -18;
+    comp.knee.value = 12;
+    comp.ratio.value = 3;
+    comp.attack.value = 0.01;
+    comp.release.value = 0.4;
 
-    var master = actx.createGain(); master.gain.value = 0.9;
-    var tone = actx.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = 5200; tone.Q.value = 0.3;
+    var master = actx.createGain();
+    master.gain.value = 0.9;
 
-    bus = actx.createGain(); bus.gain.value = 1; bus.connect(tone); tone.connect(master);
+    var tone = actx.createBiquadFilter();
+    tone.type = 'lowpass';
+    tone.frequency.value = 5200;
+    tone.Q.value = 0.3;
 
-    var pre = actx.createBiquadFilter(); pre.type = 'highpass'; pre.frequency.value = 150;
-    var verb = actx.createConvolver(); verb.buffer = makeImpulse(4.5, 2.8);
-    var wet = actx.createGain(); wet.gain.value = 0.65; // increased reverb
+    bus = actx.createGain();
+    bus.gain.value = 1;
+    bus.connect(tone);
+    tone.connect(master);
 
-    tone.connect(pre); pre.connect(verb); verb.connect(wet); wet.connect(master);
-    master.connect(comp); comp.connect(actx.destination);
+    var pre = actx.createBiquadFilter();
+    pre.type = 'highpass';
+    pre.frequency.value = 180;
+
+    var verb = actx.createConvolver();
+    verb.buffer = makeImpulse(3.8, 2.6);
+
+    var wet = actx.createGain();
+    wet.gain.value = 0.55;
+
+    tone.connect(pre);
+    pre.connect(verb);
+    verb.connect(wet);
+    wet.connect(master);
+
+    master.connect(comp);
+    comp.connect(actx.destination);
 
     panSupported = typeof actx.createStereoPanner === 'function';
   }
@@ -478,386 +816,511 @@
   function unlockAudio() {
     if (!actx) initAudio();
     if (!actx) return;
-    if (actx.state !== 'running' && actx.resume) actx.resume().catch(function(){});
+    if (actx.state !== 'running' && actx.resume) {
+      var pr = actx.resume();
+      if (pr && pr.catch) pr.catch(function () {});
+    }
     if (!silentPlayed) {
       try {
-        var b = actx.createBuffer(1, 1, 22050), src = actx.createBufferSource();
-        src.buffer = b; src.connect(actx.destination); src.start(0); silentPlayed = true;
-      } catch (e) {}
+        var b = actx.createBuffer(1, 1, 22050);
+        var src = actx.createBufferSource();
+        src.buffer = b;
+        src.connect(actx.destination);
+        src.start(0);
+        silentPlayed = true;
+      } catch (e) { /* già sbloccato */ }
     }
-  }
-
-  // Celesta / Crystal FM synth for Chimes
-  function playFMChime(freq, impact, pan) {
-    if (!actx || !bus) return;
-    var t0 = actx.currentTime + 0.02;
-    var attack = 0.01, decay = 2.5 + impact * 2;
-    var env = actx.createGain();
-    env.gain.setValueAtTime(0.0001, t0);
-    env.gain.exponentialRampToValueAtTime(clamp(impact * 0.08, 0.01, 0.06), t0 + attack);
-    env.gain.exponentialRampToValueAtTime(0.0001, t0 + attack + decay);
-
-    var panNode = null;
-    if (panSupported && pan) {
-      panNode = actx.createStereoPanner(); panNode.pan.value = clamp(pan, -1, 1);
-      env.connect(panNode); panNode.connect(bus);
-    } else env.connect(bus);
-
-    // FM Synthesis: Modulator -> ModGain -> Carrier.frequency
-    var car = actx.createOscillator(); car.type = 'sine'; car.frequency.value = freq;
-    var mod = actx.createOscillator(); mod.type = 'sine'; mod.frequency.value = freq * 2.76; // inharmonic ratio
-    var modG = actx.createGain(); 
-    
-    // Envelope for modulation index (creates the "strike" sound)
-    modG.gain.setValueAtTime(freq * 3, t0);
-    modG.gain.exponentialRampToValueAtTime(0.01, t0 + attack + decay * 0.3);
-
-    mod.connect(modG); modG.connect(car.frequency);
-    car.connect(env);
-
-    mod.start(t0); car.start(t0);
-    mod.stop(t0 + attack + decay); car.stop(t0 + attack + decay);
-
-    car.onended = function() {
-      try { env.disconnect(); if(panNode) panNode.disconnect(); } catch(e){}
-    };
   }
 
   function playNote(freq, opts) {
     if (!actx || !bus) return;
     var o = opts || {};
-    var vel = o.vel != null ? o.vel : 0.18, attack = o.attack != null ? o.attack : 0.05, decay = o.decay != null ? o.decay : 4.5;
-    var bright = o.bright != null ? o.bright : 0.5, low = o.low != null ? o.low : 0;
-    var pan = o.pan || 0, delay = o.delay || 0;
+    var vel = o.vel != null ? o.vel : 0.18;
+    var attack = o.attack != null ? o.attack : 0.05;
+    var decay = o.decay != null ? o.decay : 4.5;
+    var bright = o.bright != null ? o.bright : 0.5;
+    var low = o.low != null ? o.low : 0;
+    var pan = o.pan || 0;
+    var delay = o.delay || 0;
 
-    var t0 = actx.currentTime + 0.01 + delay, end = t0 + attack + decay + 0.05;
+    var t0 = actx.currentTime + 0.01 + delay;
+    var end = t0 + attack + decay + 0.05;
+
     var env = actx.createGain();
     env.gain.setValueAtTime(0.0001, t0);
     env.gain.linearRampToValueAtTime(vel, t0 + attack);
     env.gain.exponentialRampToValueAtTime(0.0001, t0 + attack + decay);
 
-    var pN = panSupported && pan ? actx.createStereoPanner() : null;
-    if (pN) { pN.pan.value = clamp(pan, -1, 1); env.connect(pN); pN.connect(bus); } else env.connect(bus);
+    var panNode = null;
+    if (panSupported && pan) {
+      panNode = actx.createStereoPanner();
+      panNode.pan.value = clamp(pan, -1, 1);
+      env.connect(panNode);
+      panNode.connect(bus);
+    } else {
+      env.connect(bus);
+    }
 
-    var partials = [[1, 1, 0, 1], [1, 0.45, 5, 1], [2, 0.22 * bright, -3, 0.35], [3, 0.07 * bright, 2, 0.2], [0.5, low, 0, 0.8]];
+    var partials = [
+      [1, 1, 0, 1],
+      [1, 0.45, 5, 1],
+      [2, 0.22 * bright, -3, 0.35],
+      [3, 0.07 * bright, 2, 0.2],
+      [0.5, low, 0, 0.8]
+    ];
+
     var lastOsc = null;
     for (var i = 0; i < partials.length; i++) {
-      var p = partials[i]; if (p[1] <= 0.0005) continue;
-      var osc = actx.createOscillator(); osc.type = 'sine'; osc.frequency.value = freq * p[0]; if (osc.detune) osc.detune.value = p[2];
-      var g = actx.createGain(); g.gain.setValueAtTime(p[1], t0);
+      var p = partials[i];
+      if (p[1] <= 0.0005) continue;
+      var osc = actx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq * p[0];
+      if (osc.detune) osc.detune.value = p[2];
+      var g = actx.createGain();
+      g.gain.setValueAtTime(p[1], t0);
       if (p[3] < 1) g.gain.exponentialRampToValueAtTime(Math.max(0.0001, p[1] * 0.001), t0 + attack + decay * p[3]);
-      osc.connect(g); g.connect(env); osc.start(t0); osc.stop(end); lastOsc = osc;
+      osc.connect(g);
+      g.connect(env);
+      osc.start(t0);
+      osc.stop(end);
+      lastOsc = osc;
     }
-    if (lastOsc) lastOsc.onended = function () { try { env.disconnect(); if (pN) pN.disconnect(); } catch (e) {} };
+
+    if (lastOsc) {
+      lastOsc.onended = function () {
+        try {
+          env.disconnect();
+          if (panNode) panNode.disconnect();
+        } catch (e) { /* già scollegato */ }
+      };
+    }
   }
 
   function startPad() {
     if (!actx || padGain) return;
     var t = actx.currentTime;
-    padGain = actx.createGain(); padGain.gain.setValueAtTime(0.0001, t); padGain.gain.linearRampToValueAtTime(0.03, t + 7);
 
-    var lp = actx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 650; lp.Q.value = 0.5;
+    padGain = actx.createGain();
+    padGain.gain.setValueAtTime(0.0001, t);
+    padGain.gain.linearRampToValueAtTime(0.03, t + 7);
+
+    var lp = actx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 650;
+    lp.Q.value = 0.5;
+
     var voices = [[82.41, 0.4, 0], [164.81, 0.5, 0], [246.94, 0.32, 3], [329.63, 0.14, -4]];
     for (var i = 0; i < voices.length; i++) {
-      var osc = actx.createOscillator(); osc.type = 'sine'; osc.frequency.value = voices[i][0];
+      var osc = actx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = voices[i][0];
       if (osc.detune) osc.detune.value = voices[i][2];
-      var g = actx.createGain(); g.gain.value = voices[i][1];
-      osc.connect(g); g.connect(lp); osc.start(t);
+      var g = actx.createGain();
+      g.gain.value = voices[i][1];
+      osc.connect(g);
+      g.connect(lp);
+      osc.start(t);
     }
-    lp.connect(padGain); padGain.connect(bus);
 
-    var lfo = actx.createOscillator(); lfo.frequency.value = 0.11;
-    var lfoG = actx.createGain(); lfoG.gain.setValueAtTime(0, t); lfoG.gain.linearRampToValueAtTime(0.015, t + 7);
-    lfo.connect(lfoG); lfoG.connect(padGain.gain); lfo.start(t);
+    lp.connect(padGain);
+    padGain.connect(bus);
 
-    var lfo2 = actx.createOscillator(); lfo2.frequency.value = 0.05;
-    var lfo2G = actx.createGain(); lfo2G.gain.value = 200;
-    lfo2.connect(lfo2G); lfo2G.connect(lp.frequency); lfo2.start(t);
+    var lfo = actx.createOscillator();
+    lfo.frequency.value = 0.11;
+    var lfoG = actx.createGain();
+    lfoG.gain.setValueAtTime(0, t);
+    lfoG.gain.linearRampToValueAtTime(0.01, t + 7);
+    lfo.connect(lfoG);
+    lfoG.connect(padGain.gain);
+    lfo.start(t);
+
+    var lfo2 = actx.createOscillator();
+    lfo2.frequency.value = 0.05;
+    var lfo2G = actx.createGain();
+    lfo2G.gain.value = 200;
+    lfo2.connect(lfo2G);
+    lfo2G.connect(lp.frequency);
+    lfo2.start(t);
   }
 
-  function startAmbient() {
-    if(!actx) return;
+  function startWind() {
+    if (!actx || windGain) return;
     var len = actx.sampleRate * 2;
     var nb = actx.createBuffer(1, len, actx.sampleRate);
     var d = nb.getChannelData(0);
     for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * 0.5;
-    var src = actx.createBufferSource(); src.buffer = nb; src.loop = true;
 
-    // Wind
-    windFilter = actx.createBiquadFilter(); windFilter.type = 'bandpass'; windFilter.frequency.value = 600; windFilter.Q.value = 0.8;
-    windGain = actx.createGain(); windGain.gain.value = 0;
-    src.connect(windFilter); windFilter.connect(windGain); windGain.connect(bus);
+    var src = actx.createBufferSource();
+    src.buffer = nb;
+    src.loop = true;
 
-    // Crickets/Night noise (high freq bandpass modulated)
-    var cFilt = actx.createBiquadFilter(); cFilt.type = 'bandpass'; cFilt.frequency.value = 8500; cFilt.Q.value = 2;
-    cricketsGain = actx.createGain(); cricketsGain.gain.value = 0;
-    
-    var cLFO = actx.createOscillator(); cLFO.frequency.value = 8; // chirping speed
-    var cLfoGain = actx.createGain(); cLfoGain.gain.value = 0.8;
-    cLFO.connect(cLfoGain); cLfoGain.connect(cricketsGain.gain);
-    
-    src.connect(cFilt); cFilt.connect(cricketsGain); cricketsGain.connect(bus);
-    cLFO.start(); src.start();
+    windFilter = actx.createBiquadFilter();
+    windFilter.type = 'bandpass';
+    windFilter.frequency.value = 600;
+    windFilter.Q.value = 0.8;
+
+    windGain = actx.createGain();
+    windGain.gain.value = 0;
+
+    src.connect(windFilter);
+    windFilter.connect(windGain);
+    windGain.connect(bus);
+    src.start();
   }
 
   function swellPad(peak, back, dur) {
     if (!padGain) return;
     var t = actx.currentTime;
-    padGain.gain.cancelScheduledValues(t); padGain.gain.setValueAtTime(padGain.gain.value, t);
-    padGain.gain.linearRampToValueAtTime(peak, t + dur * 0.4); padGain.gain.linearRampToValueAtTime(back, t + dur);
+    padGain.gain.cancelScheduledValues(t);
+    padGain.gain.setValueAtTime(padGain.gain.value, t);
+    padGain.gain.linearRampToValueAtTime(peak, t + dur * 0.4);
+    padGain.gain.linearRampToValueAtTime(back, t + dur);
   }
 
   function playBloom(x, y, first) {
     var idx = clamp(Math.round((1 - y / H) * (BLOOM_NOTES.length - 1)), 0, BLOOM_NOTES.length - 1);
-    var f = BLOOM_NOTES[idx], pan = (x / W * 2 - 1) * 0.6;
+    var f = BLOOM_NOTES[idx];
+    var pan = (x / W * 2 - 1) * 0.6;
     playNote(f, { vel: first ? 0.24 : 0.2, pan: pan, attack: 0.045, decay: first ? 6 : 4.6, bright: 0.6, low: first ? 0.35 : 0.18 });
-    if (first) playNote(f * 1.5, { vel: 0.08, pan: -pan, delay: 0.16, decay: 5, bright: 0.3 });
-  }
-
-  function triggerChime(impact, x) {
-    var now = performance.now(); if (now - lastChime < 150) return;
-    lastChime = now;
-    var f = CHIME_NOTES[(Math.random() * CHIME_NOTES.length) | 0];
-    playFMChime(f, impact, (x / W * 2 - 1) * 0.7);
-  }
-
-  function playArp(notes, step, vel) {
-    for (var i = 0; i < notes.length; i++) playNote(notes[i], { vel: vel, delay: i * step, decay: 5, attack: 0.05, bright: 0.35, pan: notes.length > 1 ? (i / (notes.length - 1) - 0.5) * 0.9 : 0 });
-  }
-
-  /* ---------- Entità e Fisica ---------- */
-  function emit(x, y, vx, vy, gold, lifeMin, lifeMax, sMin, sMax, alpha) {
-    if (particles.length >= MAX_PARTICLES) return;
-    var life = rand(lifeMin, lifeMax);
-    particles.push({ x: x, y: y, vx: vx, vy: vy, life: life, max: life, s: rand(sMin, sMax), gold: Math.random() < gold, seed: rand(0, TAU), a: alpha });
-  }
-
-  function burst(x, y, radius) {
-    var n = 24;
-    for (var i = 0; i < n; i++) {
-      var a = i / n * TAU + rand(-0.15, 0.15), sp = rand(20, 56);
-      emit(x + Math.cos(a) * radius, y + Math.sin(a) * radius, Math.cos(a) * sp, Math.sin(a) * sp, 0.45, 1.2, 3.2, 1.5, 4.2, 1);
+    if (first) {
+      playNote(f * 1.5, { vel: 0.08, pan: -pan, delay: 0.16, decay: 5, bright: 0.3 });
     }
   }
 
-  function spawnPetal(x, y, vx, vy) {
-    loosePetals.push({
-      x: x, y: y, z: rand(0.5, 1),
-      vx: vx + rand(-15, 15), vy: vy + rand(-15, 15),
-      rotZ: rand(0, TAU), rotX: rand(0, TAU), rotY: rand(0, TAU),
-      avZ: rand(-2, 2), avX: rand(-3, 3), avY: rand(-3, 3),
-      life: rand(8, 14)
+  function playChime(impact, x) {
+    var now = performance.now();
+    if (now - lastChime < 200) return;
+    lastChime = now;
+    var f = HIGH_NOTES[(Math.random() * HIGH_NOTES.length) | 0];
+    playNote(f, { vel: clamp(impact / 140, 0.02, 0.07), attack: 0.02, decay: 2.6, bright: 0.15, pan: (x / W * 2 - 1) * 0.7 });
+  }
+
+  function playArp(notes, step, vel) {
+    for (var i = 0; i < notes.length; i++) {
+      playNote(notes[i], {
+        vel: vel,
+        delay: i * step,
+        decay: 5,
+        attack: 0.05,
+        bright: 0.35,
+        pan: notes.length > 1 ? (i / (notes.length - 1) - 0.5) * 0.9 : 0
+      });
+    }
+  }
+
+  /* ---------- Particelle (profumo) ---------- */
+
+  function emit(x, y, vx, vy, gold, lifeMin, lifeMax, sMin, sMax, alpha) {
+    if (particles.length >= MAX_PARTICLES) return;
+    var life = rand(lifeMin, lifeMax);
+    particles.push({
+      x: x, y: y, vx: vx, vy: vy,
+      life: life, max: life,
+      s: rand(sMin, sMax),
+      gold: Math.random() < gold,
+      seed: rand(0, TAU),
+      a: alpha
     });
+  }
+
+  function burst(x, y, radius) {
+    var n = 18;
+    for (var i = 0; i < n; i++) {
+      var a = i / n * TAU + rand(-0.15, 0.15);
+      var sp = rand(18, 46);
+      emit(x + Math.cos(a) * radius, y + Math.sin(a) * radius, Math.cos(a) * sp, Math.sin(a) * sp, 0.35, 1.2, 2.6, 1.5, 3.8, 1);
+    }
+  }
+
+  function trail(x0, y0, x1, y1, vx, vy) {
+    var dx = x1 - x0, dy = y1 - y0;
+    var d = Math.sqrt(dx * dx + dy * dy);
+    var n = Math.min(10, Math.ceil(d / 6));
+    for (var i = 0; i < n; i++) {
+      var t = (i + Math.random()) / n;
+      emit(
+        x0 + dx * t + rand(-3, 3),
+        y0 + dy * t + rand(-3, 3),
+        vx * 0.04 + rand(-10, 10),
+        vy * 0.04 + rand(-10, 10),
+        0.78, 1.4, 3.0, 1.5, 4.2, 1
+      );
+    }
+  }
+
+  /* ---------- Gelsomini ---------- */
+
+  function birthScale(age) {
+    if (age <= 0) return 0;
+    return 1 - Math.exp(-6 * age) * Math.cos(11 * age);
   }
 
   function createFlower(x, y) {
     var a = rand(0, TAU), sp = rand(8, 20);
     return {
-      x: x, y: y, z: rand(0.2, 1), // Depth 0.2 (back) to 1.0 (front)
-      vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
-      rotZ: rand(0, TAU), rotX: rand(-0.3, 0.3), rotY: rand(-0.3, 0.3),
-      avZ: 0,
-      spin: rand(0.05, 0.18) * (Math.random() < 0.5 ? -1 : 1),
+      x: x, y: y,
+      vx: Math.cos(a) * sp,
+      vy: Math.sin(a) * sp,
+      rot: rand(0, TAU),
+      av: 0,
+      spin: rand(0.05, 0.22) * (Math.random() < 0.5 ? -1 : 1),
       size: baseSize * rand(0.86, 1.14),
-      born: time, wa: a, ph: rand(0, TAU),
+      born: time,
+      wa: a,
+      ph: rand(0, TAU),
       sprite: flowerSprites[(Math.random() * flowerSprites.length) | 0],
-      dying: 0, cool: 0, emit: rand(1.5, 4), slot: 0, cs: 1, scaleNow: 0, removed: false
+      dying: 0,
+      cool: 0,
+      emit: rand(1.5, 4),
+      slot: 0,
+      cs: 1,
+      scaleNow: 0,
+      removed: false
     };
   }
 
-  function initFireflies() {
-    for (var i=0; i<4; i++) fireflies.push({ x: rand(0, W), y: rand(0, H), vx: 0, vy: 0, tx: 0, ty: 0, phase: rand(0, TAU), speed: rand(15, 30) });
+  function liveFlowers() {
+    var out = [];
+    for (var i = 0; i < flowers.length; i++) if (!flowers[i].dying) out.push(flowers[i]);
+    return out;
   }
 
-  function liveFlowers() { var out = []; for (var i = 0; i < flowers.length; i++) if (!flowers[i].dying) out.push(flowers[i]); return out; }
-  function ringRadii() { var rx = W * 0.40, ry = H * 0.32; rx = Math.min(rx, ry * 2.2); ry = Math.min(ry, rx * 1.7); return [rx, ry]; }
+  function ringRadii() {
+    var rx = W * 0.40, ry = H * 0.32;
+    rx = Math.min(rx, ry * 2.2);
+    ry = Math.min(ry, rx * 1.7);
+    return [rx, ry];
+  }
 
   function reslot() {
-    var live = liveFlowers(), rr = ringRadii(), base = ringAngle - Math.PI / 2;
-    function rel(f) { var a = Math.atan2((f.y - H / 2) / rr[1], (f.x - W / 2) / rr[0]) - base; return ((a % TAU) + TAU) % TAU; }
+    var live = liveFlowers();
+    var rr = ringRadii();
+    var base = ringAngle - Math.PI / 2;
+    function rel(f) {
+      var a = Math.atan2((f.y - H / 2) / rr[1], (f.x - W / 2) / rr[0]) - base;
+      return ((a % TAU) + TAU) % TAU;
+    }
     live.sort(function (a, b) { return rel(a) - rel(b); });
     for (var i = 0; i < live.length; i++) live[i].slot = i;
-    ringOrder = live; nLive = live.length;
+    ringOrder = live;
+    nLive = live.length;
   }
 
   function bloom(x, y) {
     var first = totalBlooms === 0;
-    var f = createFlower(x, y); f.z = 1; // Always spawn in front
-    flowers.push(f); totalBlooms++;
+    var f = createFlower(x, y);
+    flowers.push(f);
+    totalBlooms++;
 
-    var live = liveFlowers(); if (live.length > MAX_FLOWERS) live[0].dying = 0.0001;
+    var live = liveFlowers();
+    if (live.length > MAX_FLOWERS) live[0].dying = 0.0001;
 
-    burst(x, y, f.size * 0.4); playBloom(x, y, first);
+    burst(x, y, f.size * 0.3);
+    playBloom(x, y, first);
+
     if (mode === 'constellation') reslot();
 
+    if (first) scheduleHint();
+
     if (totalBlooms === 7 && !eggAuto && mode === 'free') {
-      eggAuto = true; setTimeout(function () { if (mode === 'free') enterConstellation(); }, 1200);
+      eggAuto = true;
+      setTimeout(function () {
+        if (mode === 'free') enterConstellation();
+      }, 1200);
     }
   }
 
+  function scheduleHint() {
+    hintTimers.push(setTimeout(function () {
+      if (mode === 'free') hintEl.classList.add('show');
+    }, 2200));
+    hintTimers.push(setTimeout(function () {
+      hintEl.classList.remove('show');
+    }, 8500));
+  }
+
+  function hideHint() {
+    for (var i = 0; i < hintTimers.length; i++) clearTimeout(hintTimers[i]);
+    hintTimers = [];
+    hintEl.classList.remove('show');
+  }
+
   function enterConstellation() {
-    if (mode === 'constellation') return; mode = 'constellation';
-    reslot(); playArp(ARP_UP, 0.28, 0.13); swellPad(0.06, 0.04, 6);
-    setTimeout(function () {
+    if (mode === 'constellation') return;
+    mode = 'constellation';
+    reslot();
+    hideHint();
+    playArp(ARP_UP, 0.28, 0.13);
+    swellPad(0.05, 0.034, 6);
+    clearTimeout(cardTimer);
+    cardTimer = setTimeout(function () {
       if (mode !== 'constellation') return;
-      cardEl.classList.add('show'); cardEl.setAttribute('aria-hidden', 'false');
+      cardEl.classList.add('show');
+      cardEl.setAttribute('aria-hidden', 'false');
     }, 2200);
   }
 
   function releaseConstellation() {
-    if (mode !== 'constellation') return; mode = 'free';
-    cardEl.classList.remove('show'); cardEl.setAttribute('aria-hidden', 'true');
+    if (mode !== 'constellation') return;
+    mode = 'free';
+    clearTimeout(cardTimer);
+    cardEl.classList.remove('show');
+    cardEl.setAttribute('aria-hidden', 'true');
     for (var i = 0; i < flowers.length; i++) {
-      var f = flowers[i], dx = f.x - W / 2, dy = f.y - H / 2, d = Math.sqrt(dx * dx + dy * dy) || 1, sp = rand(20, 50);
-      f.vx += dx / d * sp; f.vy += dy / d * sp;
-      f.wa = Math.atan2(dy, dx) + rand(-0.6, 0.6); f.avZ += rand(-0.8, 0.8);
-      burst(f.x, f.y, f.size*0.5);
-    }
-    playArp(ARP_DOWN, 0.18, 0.09); swellPad(0.05, 0.03, 4);
-  }
-
-  function update(dt) {
-    time += dt; lastUserAction += dt;
-    var constel = mode === 'constellation';
-    cAlpha += ((constel ? 1 : 0) - cAlpha) * Math.min(1, dt * 1.2);
-    if (constel) ringAngle += dt * 0.05;
-
-    // Sleep mode logic
-    var targetSleep = (lastUserAction > 45 && !constel) ? 1 : 0;
-    var isNowSleeping = targetSleep > 0.5;
-    if (isNowSleeping !== isSleeping) {
-      isSleeping = isNowSleeping;
-      sleepVeil.classList.toggle('active', isSleeping);
-      if (cricketsGain) cricketsGain.gain.setTargetAtTime(isSleeping ? 0.005 : 0.0001, actx.currentTime, 4);
-    }
-
-    // Long press logic
-    var isPointerDown = false;
-    for (var id in pointers) {
-      var p = pointers[id];
-      if (p.down) {
-         isPointerDown = true;
-         if (p.moved < 15 && (time - p.t0) > 0.6) {
-           isHolding = true; holdCenter.x = p.lx; holdCenter.y = p.ly;
-         } else { isHolding = false; }
+      var f = flowers[i];
+      var dx = f.x - W / 2, dy = f.y - H / 2;
+      var d = Math.sqrt(dx * dx + dy * dy) || 1;
+      var sp = rand(14, 34);
+      f.vx += dx / d * sp + rand(-6, 6);
+      f.vy += dy / d * sp + rand(-6, 6);
+      f.wa = Math.atan2(dy, dx) + rand(-0.6, 0.6);
+      f.av += rand(-0.4, 0.4);
+      for (var k = 0; k < 4; k++) {
+        emit(f.x, f.y, rand(-20, 20), rand(-20, 20), 0.3, 1.5, 3, 1.5, 3.5, 0.9);
       }
     }
-    if (!isPointerDown && isHolding) {
-       isHolding = false;
-       burst(holdCenter.x, holdCenter.y, 60);
-       playArp([392.00, 493.88, 587.33, 783.99], 0.08, 0.15); // Release burst
-    }
-    holdTension += ((isHolding ? 1 : 0) - holdTension) * dt * 2;
-    var hK = holdTension;
+    playArp(ARP_DOWN, 0.18, 0.09);
+    swellPad(0.04, 0.03, 4);
+  }
 
-    var rr = ringRadii(), rx = rr[0], ry = rr[1], cScaleT = 1;
+  /* ---------- Brezza ---------- */
+
+  function breeze(x, y, dx, dy, vx, vy) {
+    var R = Math.max(120, Math.min(W, H) * 0.36);
+    var speed = Math.sqrt(vx * vx + vy * vy);
+    var gust = 0.35 + 0.65 * Math.min(1, speed / 900);
+    for (var i = 0; i < flowers.length; i++) {
+      var f = flowers[i];
+      var ddx = f.x - x, ddy = f.y - y;
+      var d = Math.sqrt(ddx * ddx + ddy * ddy);
+      if (d > R) continue;
+      var fall = 1 - d / R;
+      var k = fall * fall * gust;
+      f.vx += dx * k * 0.6;
+      f.vy += dy * k * 0.6;
+      if (d > 1) {
+        f.vx += ddx / d * k * 6;
+        f.vy += ddy / d * k * 6;
+      }
+      f.av += ((ddx * dy - ddy * dx) / (d + 1)) * k * 0.004;
+    }
+    windLevel = Math.max(windLevel, Math.min(1, speed / 1400));
+  }
+
+  /* ---------- Simulazione ---------- */
+
+  function update(dt) {
+    time += dt;
+    var constel = mode === 'constellation';
+    cAlpha += ((constel ? 1 : 0) - cAlpha) * Math.min(1, dt * 1.2);
+    if (constel) ringAngle += dt * 0.07;
+
+    var rr = ringRadii();
+    var rx = rr[0], ry = rr[1];
+    var cScaleT = 1;
     if (constel && nLive > 0) {
       var perim = Math.PI * (3 * (rx + ry) - Math.sqrt((3 * rx + ry) * (rx + 3 * ry)));
       cScaleT = clamp(perim / (nLive * baseSize * 2.1), 0.5, 1);
     }
 
-    // Flowers update
     for (var i = 0; i < flowers.length; i++) {
-      var f = flowers[i], age = time - f.born;
+      var f = flowers[i];
+      var age = time - f.born;
       f.cs += ((constel && !f.dying ? cScaleT : 1) - f.cs) * Math.min(1, dt * 1.5);
-      f.scaleNow = (age <= 0 ? 0 : 1 - Math.exp(-6 * age) * Math.cos(11 * age)) * f.cs * (0.6 + f.z * 0.4);
+      f.scaleNow = birthScale(age) * f.cs;
       if (f.cool > 0) f.cool -= dt;
-
-      // Attract to hold center
-      if (hK > 0.01 && !constel) {
-         var dx = holdCenter.x - f.x, dy = holdCenter.y - f.y;
-         var d = Math.sqrt(dx*dx + dy*dy) + 1;
-         f.vx += (dx/d) * 80 * hK * dt; f.vy += (dy/d) * 80 * hK * dt;
-      }
 
       if (constel && !f.dying && nLive > 0) {
         var ang = ringAngle + f.slot / nLive * TAU - Math.PI / 2;
         var tx = W / 2 + Math.cos(ang) * rx + Math.sin(time * 0.7 + f.ph) * 4;
         var ty = H / 2 + Math.sin(ang) * ry + Math.cos(time * 0.6 + f.ph) * 4;
-        f.vx += ((tx - f.x) * 0.9 - f.vx * 1.6) * dt; f.vy += ((ty - f.y) * 0.9 - f.vy * 1.6) * dt;
-        f.rotX += (0 - f.rotX) * dt; f.rotY += (0 - f.rotY) * dt; // flatten out
+        f.vx += ((tx - f.x) * 0.9 - f.vx * 1.6) * dt;
+        f.vy += ((ty - f.y) * 0.9 - f.vy * 1.6) * dt;
       } else {
         f.wa += (Math.sin(time * 0.37 + f.ph) * 0.5 + (Math.random() - 0.5) * 1.4) * dt;
-        // Gravity / Gyro drift
-        f.vx += gx * 120 * dt; f.vy += gy * 120 * dt;
-        f.vx += Math.cos(f.wa) * 5 * dt; f.vy += Math.sin(f.wa) * 5 * dt;
-        var drag = Math.exp(-dt * (0.32 + hK*2)); // more drag when holding
-        f.vx *= drag; f.vy *= drag;
-        
-        // Tumbling based on velocity
-        f.rotX += (f.vy * 0.002 - f.rotX) * dt * 2;
-        f.rotY += (-f.vx * 0.002 - f.rotY) * dt * 2;
+        f.vx += Math.cos(f.wa) * 5 * dt;
+        f.vy += Math.sin(f.wa) * 5 * dt;
+        var drag = Math.exp(-dt * 0.32);
+        f.vx *= drag;
+        f.vy *= drag;
       }
 
-      var maxV = constel ? 140 : 320; var sp2 = f.vx * f.vx + f.vy * f.vy;
-      if (sp2 > maxV * maxV) { var sc = maxV / Math.sqrt(sp2); f.vx *= sc; f.vy *= sc; }
+      var maxV = constel ? 140 : 320;
+      var sp2 = f.vx * f.vx + f.vy * f.vy;
+      if (sp2 > maxV * maxV) {
+        var sc = maxV / Math.sqrt(sp2);
+        f.vx *= sc;
+        f.vy *= sc;
+      }
 
-      f.x += f.vx * dt * (isSleeping ? 0.3 : 1); f.y += f.vy * dt * (isSleeping ? 0.3 : 1);
-      f.avZ += (f.spin - f.avZ) * Math.min(1, dt * 0.6); f.rotZ += f.avZ * dt * (isSleeping ? 0.2 : 1);
+      f.x += f.vx * dt;
+      f.y += f.vy * dt;
 
-      // Bounce
+      f.av += (f.spin - f.av) * Math.min(1, dt * 0.6);
+      f.rot += f.av * dt;
+
       var r = f.size * 0.78 * Math.max(0.4, f.scaleNow);
-      if (f.x < r) { f.vx += (r - f.x) * 18 * dt; if(f.x < r * 0.5) { f.x = r * 0.5; if(f.vx < 0) f.vx *= -0.6; } }
-      else if (f.x > W - r) { f.vx -= (f.x - (W - r)) * 18 * dt; if(f.x > W - r * 0.5) { f.x = W - r * 0.5; if(f.vx > 0) f.vx *= -0.6; } }
-      if (f.y < r) { f.vy += (r - f.y) * 18 * dt; if(f.y < r * 0.5) { f.y = r * 0.5; if(f.vy < 0) f.vy *= -0.6; } }
-      else if (f.y > H - r) { f.vy -= (f.y - (H - r)) * 18 * dt; if(f.y > H - r * 0.5) { f.y = H - r * 0.5; if(f.vy > 0) f.vy *= -0.6; } }
+      if (f.x < r) {
+        f.vx += (r - f.x) * 18 * dt;
+        if (f.x < r * 0.5) { f.x = r * 0.5; if (f.vx < 0) f.vx = -f.vx * 0.6; }
+      } else if (f.x > W - r) {
+        f.vx -= (f.x - (W - r)) * 18 * dt;
+        if (f.x > W - r * 0.5) { f.x = W - r * 0.5; if (f.vx > 0) f.vx = -f.vx * 0.6; }
+      }
+      if (f.y < r) {
+        f.vy += (r - f.y) * 18 * dt;
+        if (f.y < r * 0.5) { f.y = r * 0.5; if (f.vy < 0) f.vy = -f.vy * 0.6; }
+      } else if (f.y > H - r) {
+        f.vy -= (f.y - (H - r)) * 18 * dt;
+        if (f.y > H - r * 0.5) { f.y = H - r * 0.5; if (f.vy > 0) f.vy = -f.vy * 0.6; }
+      }
 
       f.emit -= dt;
       if (f.emit <= 0 && age > 1) {
         f.emit = rand(2.5, 5) * (constel ? 0.5 : 1);
-        emit(f.x + rand(-0.3, 0.3) * f.size, f.y + rand(-0.3, 0.3) * f.size, rand(-6, 6), rand(-14, -4), 0.4, 2.5, 4.5, 1.2, 3, 0.55);
+        emit(
+          f.x + rand(-0.3, 0.3) * f.size,
+          f.y + rand(-0.3, 0.3) * f.size,
+          rand(-6, 6), rand(-14, -4),
+          0.4, 2.5, 4.5, 1.2, 3, 0.55
+        );
       }
+
       if (f.dying) f.dying += dt;
     }
 
     var removedAny = false;
     for (var j = flowers.length - 1; j >= 0; j--) {
-      if (flowers[j].dying > 1.8) { flowers[j].removed = true; flowers.splice(j, 1); removedAny = true; }
+      if (flowers[j].dying > 1.8) {
+        flowers[j].removed = true;
+        flowers.splice(j, 1);
+        removedAny = true;
+      }
     }
     if (removedAny && constel) reslot();
+
     if (!constel) collide();
 
-    // Petals
-    for (var k = loosePetals.length - 1; k >= 0; k--) {
-       var lp = loosePetals[k];
-       lp.life -= dt;
-       if (lp.life <= 0) { loosePetals.splice(k, 1); continue; }
-       lp.vx += (gx * 80 + Math.cos(time*2 + lp.rotZ)*15) * dt;
-       lp.vy += (gy * 80 + Math.sin(time*1.5)*15) * dt;
-       lp.vx *= 0.98; lp.vy *= 0.98;
-       lp.x += lp.vx * dt; lp.y += lp.vy * dt;
-       lp.rotZ += lp.avZ * dt; lp.rotX += lp.avX * dt; lp.rotY += lp.avY * dt;
-    }
-
-    // Particles
     for (var p = particles.length - 1; p >= 0; p--) {
-      var q = particles[p]; q.life -= dt;
-      if (q.life <= 0) { particles[p] = particles[particles.length - 1]; particles.pop(); continue; }
-      var dr = Math.exp(-dt * (0.8 + hK));
-      q.vx = q.vx * dr + Math.sin(time * 1.3 + q.seed) * 6 * dt + (gx * 30 * dt);
-      q.vy = q.vy * dr + Math.cos(time * 1.1 + q.seed * 1.7) * 6 * dt - 4 * dt + (gy * 30 * dt);
-      if(hK > 0.01) {
-         var dx = holdCenter.x - q.x, dy = holdCenter.y - q.y, d = Math.sqrt(dx*dx+dy*dy)+1;
-         q.vx += (dx/d)*40*hK*dt; q.vy += (dy/d)*40*hK*dt;
+      var q = particles[p];
+      q.life -= dt;
+      if (q.life <= 0) {
+        particles[p] = particles[particles.length - 1];
+        particles.pop();
+        continue;
       }
-      q.x += q.vx * dt; q.y += q.vy * dt;
-    }
-
-    // Fireflies
-    var targetX = W/2, targetY = H/2;
-    if (isPointerDown) { targetX = holdCenter.x; targetY = holdCenter.y; }
-    for (var fI = 0; fI < fireflies.length; fI++) {
-       var ff = fireflies[fI];
-       var tx = isPointerDown ? targetX + Math.cos(time+ff.phase)*60 : W/2 + Math.cos(time*0.2+ff.phase)*W*0.4;
-       var ty = isPointerDown ? targetY + Math.sin(time*1.2+ff.phase)*60 : H/2 + Math.sin(time*0.3+ff.phase)*H*0.4;
-       ff.vx += (tx - ff.x)*0.5*dt; ff.vy += (ty - ff.y)*0.5*dt;
-       ff.vx *= 0.95; ff.vy *= 0.95;
-       ff.x += ff.vx * dt + Math.cos(time*3+ff.phase)*0.5; ff.y += ff.vy * dt + Math.sin(time*2.5+ff.phase)*0.5;
+      var dr = Math.exp(-dt * 0.8);
+      q.vx = q.vx * dr + Math.sin(time * 1.3 + q.seed) * 6 * dt;
+      q.vy = q.vy * dr + Math.cos(time * 1.1 + q.seed * 1.7) * 6 * dt - 4 * dt;
+      q.x += q.vx * dt;
+      q.y += q.vy * dt;
     }
 
     windLevel *= Math.exp(-dt * 2.5);
     if (windGain && time - lastWindSet > 0.05) {
-      lastWindSet = time; var at = actx.currentTime;
+      lastWindSet = time;
+      var at = actx.currentTime;
       windGain.gain.setTargetAtTime(windLevel * 0.06, at, 0.12);
       windFilter.frequency.setTargetAtTime(500 + windLevel * 1400, at, 0.15);
     }
@@ -866,231 +1329,268 @@
   function collide() {
     var n = flowers.length;
     for (var i = 0; i < n; i++) {
-      var a = flowers[i]; if (a.dying) continue;
+      var a = flowers[i];
+      if (a.dying) continue;
       for (var j = i + 1; j < n; j++) {
-        var b = flowers[j]; if (b.dying) continue;
-        var dx = b.x - a.x, dy = b.y - a.y, rr = (a.size * a.scaleNow + b.size * b.scaleNow) * 0.72;
-        var d2 = dx * dx + dy * dy; if (d2 >= rr * rr || d2 < 0.0001) continue;
-        var d = Math.sqrt(d2), nx = dx / d, ny = dy / d, overlap = rr - d, corr = overlap * 0.25;
-        // Depth-aware collision (soften if Z differs)
-        var zDiff = Math.abs(a.z - b.z); if (zDiff > 0.3) corr *= 0.2;
+        var b = flowers[j];
+        if (b.dying) continue;
+        var dx = b.x - a.x, dy = b.y - a.y;
+        var rr = (a.size * a.scaleNow + b.size * b.scaleNow) * 0.72;
+        var d2 = dx * dx + dy * dy;
+        if (d2 >= rr * rr || d2 < 0.0001) continue;
+        var d = Math.sqrt(d2);
+        var nx = dx / d, ny = dy / d;
+        var overlap = rr - d;
+        var corr = overlap * 0.25;
+        a.x -= nx * corr; a.y -= ny * corr;
+        b.x += nx * corr; b.y += ny * corr;
 
-        a.x -= nx * corr; a.y -= ny * corr; b.x += nx * corr; b.y += ny * corr;
         var rv = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
-        if (rv < 0 && zDiff < 0.4) {
+        if (rv < 0) {
           var imp = -(1 + 0.65) * rv / 2;
-          a.vx -= imp * nx; a.vy -= imp * ny; b.vx += imp * nx; b.vy += imp * ny;
-          a.avZ += rand(-0.3, 0.3); b.avZ += rand(-0.3, 0.3);
-          
+          a.vx -= imp * nx; a.vy -= imp * ny;
+          b.vx += imp * nx; b.vy += imp * ny;
+          a.av += rand(-0.3, 0.3);
+          b.av += rand(-0.3, 0.3);
+
           var impact = -rv;
-          if (impact > 15 && a.cool <= 0 && b.cool <= 0) {
+          if (impact > 3 && a.cool <= 0 && b.cool <= 0) {
             a.cool = b.cool = 0.45;
-            var cx = a.x + nx * d * 0.5, cy = a.y + ny * d * 0.5;
-            for (var k = 0; k < 6; k++) {
+            var w = a.size / (a.size + b.size);
+            var cx = a.x + nx * d * w;
+            var cy = a.y + ny * d * w;
+            var cnt = 6 + Math.min(10, impact * 0.25);
+            for (var k = 0; k < cnt; k++) {
               var ang = rand(0, TAU), s = rand(6, 22) + impact * 0.1;
               emit(cx, cy, Math.cos(ang) * s, Math.sin(ang) * s, 0.55, 1.6, 3.4, 1.4, 4, 1);
             }
-            if (Math.random() < 0.3) spawnPetal(cx, cy, nx*impact, ny*impact);
-            triggerChime(impact, cx);
+            playChime(impact, cx);
           }
         }
       }
     }
   }
 
+  /* ---------- Rendering ---------- */
+
   function render() {
-    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = 1; ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.globalCompositeOperation = 'lighter';
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.globalCompositeOperation = 'lighter';
+
+    for (var t = 0; t < twinkles.length; t++) {
+      var s = twinkles[t];
+      ctx.globalAlpha = s.a * (0.35 + 0.65 * (0.5 + 0.5 * Math.sin(time * s.sp + s.ph)));
+      var ts = s.r * 6;
+      ctx.drawImage(pearlDot, s.x - ts / 2, s.y - ts / 2, ts, ts);
+    }
 
     if (cAlpha > 0.01 && ringOrder.length > 1) {
-      ctx.globalAlpha = 1; ctx.strokeStyle = 'rgba(255, 226, 170, ' + (0.16 * cAlpha).toFixed(3) + ')';
-      ctx.lineWidth = 0.8; ctx.beginPath(); var startPt = null;
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = 'rgba(255, 226, 170, ' + (0.16 * cAlpha).toFixed(3) + ')';
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      var startPt = null;
       for (var o = 0; o < ringOrder.length; o++) {
-        var rf = ringOrder[o]; if (rf.removed) continue;
-        if (!startPt) { ctx.moveTo(rf.x, rf.y); startPt = rf; } else ctx.lineTo(rf.x, rf.y);
+        var rf = ringOrder[o];
+        if (rf.removed) continue;
+        if (!startPt) { ctx.moveTo(rf.x, rf.y); startPt = rf; }
+        else ctx.lineTo(rf.x, rf.y);
       }
-      if (startPt) ctx.lineTo(startPt.x, startPt.y); ctx.stroke();
+      if (startPt) ctx.lineTo(startPt.x, startPt.y);
+      ctx.stroke();
     }
 
     var i, f, age, sB, alpha, dieK, scale;
 
-    // Draw Glows (Z-sorted implicitly by drawing all glows first, but they are additive anyway)
     for (i = 0; i < flowers.length; i++) {
-      f = flowers[i]; age = time - f.born; sB = (age <= 0 ? 0 : 1 - Math.exp(-6 * age) * Math.cos(11 * age)); if (sB < 0.01) continue;
+      f = flowers[i];
+      age = time - f.born;
+      sB = birthScale(age);
+      if (sB < 0.01) continue;
+      alpha = Math.min(1, age * 3);
       dieK = f.dying ? 1 - clamp(f.dying / 1.8, 0, 1) : 1;
+      alpha *= dieK;
+      scale = sB * f.cs * (1 + 0.025 * Math.sin(time * 0.9 + f.ph));
       var flash = age < 0.8 ? (1 - age / 0.8) * 0.6 : 0;
-      var ga = ((0.32 + 0.12 * Math.sin(time * 0.9 + f.ph)) * Math.min(1, age*3) * dieK + flash) * (1 + 0.35 * cAlpha);
+      var ga = ((0.32 + 0.12 * Math.sin(time * 0.9 + f.ph)) * alpha + flash) * (1 + 0.35 * cAlpha);
       if (ga < 0.01) continue;
-      scale = sB * f.cs * (1 + 0.025 * Math.sin(time * 0.9 + f.ph)) * (0.6 + f.z*0.4);
       var gs = f.size * scale * 3.4;
-      ctx.globalAlpha = Math.min(1, ga * f.z); // Fade back glows
+      ctx.globalAlpha = Math.min(1, ga);
       ctx.drawImage(glowSprite, f.x - gs / 2, f.y - gs / 2, gs, gs);
     }
 
-    // Sort entities by Z for correct occlusion
-    var renderList = [];
-    for (i = 0; i < flowers.length; i++) renderList.push({type: 'f', ref: flowers[i], z: flowers[i].z});
-    for (i = 0; i < loosePetals.length; i++) renderList.push({type: 'p', ref: loosePetals[i], z: loosePetals[i].z});
-    renderList.sort(function(a, b) { return a.z - b.z; });
-
     ctx.globalCompositeOperation = 'source-over';
-    for (i = 0; i < renderList.length; i++) {
-       var item = renderList[i];
-       if (item.type === 'f') {
-          f = item.ref; age = time - f.born; sB = (age <= 0 ? 0 : 1 - Math.exp(-6 * age) * Math.cos(11 * age)); if (sB < 0.01) continue;
-          dieK = f.dying ? 1 - clamp(f.dying / 1.8, 0, 1) : 1; alpha = Math.min(1, age * 3) * dieK; if (alpha < 0.01) continue;
-          scale = sB * f.cs * (1 + 0.025 * Math.sin(time * 0.9 + f.ph)) * (f.dying ? 0.6 + 0.4 * dieK : 1) * (0.5 + f.z*0.5);
-          var rotZ = f.rotZ + (1 - sB) * 0.9 + Math.sin(time * 0.5 + f.ph) * 0.04;
-          var k = (f.size * scale / SPRITE_R) * DPR;
-          
-          ctx.save();
-          ctx.translate(f.x * DPR, f.y * DPR);
-          ctx.rotate(rotZ);
-          ctx.scale(Math.cos(f.rotX)*k, Math.cos(f.rotY)*k); // 3D Tumbling
-          ctx.globalAlpha = alpha * (0.4 + f.z*0.6); // Fade distant
-          if(f.z < 0.7) ctx.filter = 'blur(' + ((0.7-f.z)*5) + 'px)'; // Depth of field blur
-          ctx.drawImage(f.sprite, -SPRITE / 2, -SPRITE / 2);
-          ctx.restore();
-       } else {
-          var p = item.ref; alpha = Math.min(1, p.life);
-          ctx.save();
-          ctx.translate(p.x * DPR, p.y * DPR);
-          ctx.rotate(p.rotZ);
-          var pk = (baseSize * 0.4 / SPRITE_R) * DPR;
-          ctx.scale(Math.cos(p.rotX)*pk, Math.cos(p.rotY)*pk);
-          ctx.globalAlpha = alpha * (0.4 + p.z*0.6);
-          ctx.drawImage(petalSprite, -SPRITE/2, -SPRITE/2);
-          ctx.restore();
-       }
+    for (i = 0; i < flowers.length; i++) {
+      f = flowers[i];
+      age = time - f.born;
+      sB = birthScale(age);
+      if (sB < 0.01) continue;
+      alpha = Math.min(1, age * 3);
+      dieK = f.dying ? 1 - clamp(f.dying / 1.8, 0, 1) : 1;
+      alpha *= dieK;
+      if (alpha < 0.01) continue;
+      scale = sB * f.cs * (1 + 0.025 * Math.sin(time * 0.9 + f.ph)) * (f.dying ? 0.6 + 0.4 * dieK : 1);
+      var rot = f.rot + (1 - sB) * 0.9 + Math.sin(time * 0.5 + f.ph) * 0.04;
+      var k = (f.size * scale / SPRITE_R) * DPR;
+      var c = Math.cos(rot) * k, sn = Math.sin(rot) * k;
+      ctx.setTransform(c, sn, -sn, c, f.x * DPR, f.y * DPR);
+      ctx.globalAlpha = alpha;
+      ctx.drawImage(f.sprite, -SPRITE / 2, -SPRITE / 2);
     }
 
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.globalCompositeOperation = 'lighter';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.globalCompositeOperation = 'lighter';
     for (i = 0; i < particles.length; i++) {
-      var q = particles[i], kk = q.life / q.max, fadeIn = Math.min(1, (q.max - q.life) / 0.25);
-      var a = Math.pow(kk, 1.4) * fadeIn * q.a * (0.75 + 0.25 * Math.sin(time * 6 + q.seed * 3));
-      if (a < 0.01) continue; var ps = q.s * (0.6 + 0.4 * kk) * 4;
-      ctx.globalAlpha = a; ctx.drawImage(q.gold ? goldDot : pearlDot, q.x - ps / 2, q.y - ps / 2, ps, ps);
+      var p = particles[i];
+      var kk = p.life / p.max;
+      var fadeIn = Math.min(1, (p.max - p.life) / 0.25);
+      var a = Math.pow(kk, 1.4) * fadeIn * p.a * (0.75 + 0.25 * Math.sin(time * 6 + p.seed * 3));
+      if (a < 0.01) continue;
+      var ps = p.s * (0.6 + 0.4 * kk) * 4;
+      ctx.globalAlpha = a;
+      ctx.drawImage(p.gold ? goldDot : pearlDot, p.x - ps / 2, p.y - ps / 2, ps, ps);
     }
-    
-    // Fireflies
-    for (i=0; i<fireflies.length; i++) {
-      var ff = fireflies[i];
-      var fa = 0.5 + 0.5*Math.sin(time*3 + ff.phase);
-      ctx.globalAlpha = fa;
-      var ffs = 30;
-      ctx.drawImage(fireflyDot, ff.x - ffs/2, ff.y - ffs/2, ffs, ffs);
-      ctx.globalAlpha = fa*0.8;
-      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(ff.x, ff.y, 1, 0, TAU); ctx.fill();
-    }
-    
-    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
   }
 
   var lastFrame = performance.now();
   function frame(now) {
-    var dt = clamp((now - lastFrame) / 1000, 0, 0.05); lastFrame = now;
-    update(dt); render(); requestAnimationFrame(frame);
+    var dt = (now - lastFrame) / 1000;
+    lastFrame = now;
+    if (dt > 0.05) dt = 0.05;
+    if (dt < 0) dt = 0;
+    update(dt);
+    render();
+    requestAnimationFrame(frame);
   }
 
-  function reqDeviceMotion() {
-    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-      DeviceOrientationEvent.requestPermission().then(function(state) {
-        if (state === 'granted') window.addEventListener('deviceorientation', handleOrientation);
-      }).catch(function(){});
-    } else window.addEventListener('deviceorientation', handleOrientation);
-  }
-  function handleOrientation(e) {
-    var b = clamp(e.beta, -45, 45), g = clamp(e.gamma, -45, 45);
-    gx = g / 45; gy = b / 45;
-  }
+  /* ---------- Interazione ---------- */
+
+  var pointers = {};
 
   function begin() {
     started = true;
-    introEl.classList.add('out'); setTimeout(function () { introEl.style.display = 'none'; }, 1800);
-    startPad(); startAmbient(); initFireflies(); reqDeviceMotion();
+    introEl.classList.add('out');
+    setTimeout(function () { introEl.style.display = 'none'; }, 1800);
+    startPad();
+    startWind();
   }
 
   function tap(x, y) {
-    lastUserAction = 0;
-    var now = performance.now(), cr = Math.min(W, H) * 0.2, inC = Math.sqrt((x - W / 2) * (x - W / 2) + (y - H / 2) * (y - H / 2)) < cr;
-    if (inC && mode === 'free' && pointers['centerTap'] && now - pointers['centerTap'] < 400) { pointers['centerTap'] = 0; enterConstellation(); return; }
-    if (inC) pointers['centerTap'] = now;
+    var now = performance.now();
+    var cr = Math.min(W, H) * 0.2;
+    var inC = Math.sqrt((x - W / 2) * (x - W / 2) + (y - H / 2) * (y - H / 2)) < cr;
+    if (inC && mode === 'free' && lastCenterTap && now - lastCenterTap.t < 400 &&
+        Math.sqrt((x - lastCenterTap.x) * (x - lastCenterTap.x) + (y - lastCenterTap.y) * (y - lastCenterTap.y)) < 70) {
+      lastCenterTap = null;
+      enterConstellation();
+      return;
+    }
+    lastCenterTap = inC ? { x: x, y: y, t: now } : null;
     bloom(x, y);
   }
 
   function onDown(e) {
-    if (e.target === cardBtn) return;
-    lastUserAction = 0; unlockAudio(); if (!started) begin();
-    try { if (e.target.setPointerCapture) e.target.setPointerCapture(e.pointerId); } catch (err) {}
+    unlockAudio();
+    if (!started) begin();
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* opzionale */ }
     var now = performance.now();
-    pointers[e.pointerId] = { lx: e.clientX, ly: e.clientY, t0: now, moved: 0, down: true, vx: 0, vy: 0 };
-    if (e.cancelable && e.target.tagName && e.target.tagName.toLowerCase() === 'canvas') e.preventDefault();
+    pointers[e.pointerId] = {
+      lx: e.clientX, ly: e.clientY,
+      lt: now, t0: now,
+      moved: 0, drag: false,
+      vx: 0, vy: 0
+    };
+    if (e.cancelable) e.preventDefault();
   }
 
   function onMove(e) {
-    var p = pointers[e.pointerId]; if (!p) return;
-    var x = e.clientX, y = e.clientY, dx = x - p.lx, dy = y - p.ly, dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < 0.5) return; lastUserAction = 0;
-    var now = performance.now(), dtp = Math.max(0.008, (now - (p.lt || p.t0)) / 1000);
-    p.vx = p.vx * 0.6 + (dx / dtp) * 0.4; p.vy = p.vy * 0.6 + (dy / dtp) * 0.4; p.moved += dist;
-    
-    if (p.moved > TAP_SLOP && !isHolding) {
-      var R = Math.max(120, Math.min(W, H) * 0.36), speed = Math.sqrt(p.vx*p.vx + p.vy*p.vy), gust = 0.35 + 0.65*Math.min(1, speed/900);
-      for (var i = 0; i < flowers.length; i++) {
-        var f = flowers[i], ddx = f.x - x, ddy = f.y - y, d2 = Math.sqrt(ddx*ddx + ddy*ddy);
-        if (d2 > R) continue;
-        var k = Math.pow(1 - d2/R, 2) * gust;
-        f.vx += dx * k * 0.6; f.vy += dy * k * 0.6;
-        if (d2 > 1) { f.vx += ddx/d2 * k * 6; f.vy += ddy/d2 * k * 6; }
-        f.avZ += ((ddx*dy - ddy*dx)/(d2+1)) * k * 0.004;
-      }
-      windLevel = Math.max(windLevel, Math.min(1, speed / 1400));
-      
-      var dn = Math.min(10, Math.ceil(dist / 6));
-      for (var j = 0; j < dn; j++) {
-        var t = (j + Math.random()) / dn;
-        emit(p.lx + dx * t + rand(-3, 3), p.ly + dy * t + rand(-3, 3), p.vx * 0.04 + rand(-10, 10), p.vy * 0.04 + rand(-10, 10), 0.78, 1.4, 3.0, 1.5, 4.2, 1);
-      }
+    var p = pointers[e.pointerId];
+    if (!p) return;
+    var x = e.clientX, y = e.clientY;
+    var dx = x - p.lx, dy = y - p.ly;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 0.5) return;
+    var now = performance.now();
+    var dtp = Math.max(0.008, (now - p.lt) / 1000);
+    p.vx = p.vx * 0.6 + (dx / dtp) * 0.4;
+    p.vy = p.vy * 0.6 + (dy / dtp) * 0.4;
+    p.moved += dist;
+    if (p.moved > TAP_SLOP) {
+      p.drag = true;
+      breeze(x, y, dx, dy, p.vx, p.vy);
+      trail(p.lx, p.ly, x, y, p.vx, p.vy);
     }
-    p.lx = x; p.ly = y; p.lt = now; if (e.cancelable) e.preventDefault();
+    p.lx = x;
+    p.ly = y;
+    p.lt = now;
+    if (e.cancelable) e.preventDefault();
   }
 
   function onUp(e) {
-    if (e.target === cardBtn) return;
-    var p = pointers[e.pointerId]; if (!p) return;
-    p.down = false; lastUserAction = 0;
-    if (e.type === 'pointerup') {
-      var dur = performance.now() - p.t0;
-      if (p.moved < TAP_SLOP && dur < 600 && !isHolding) tap(e.clientX, e.clientY);
-    }
+    var p = pointers[e.pointerId];
+    if (!p) return;
     delete pointers[e.pointerId];
+    if (e.type !== 'pointerup') return;
+    var dur = performance.now() - p.t0;
+    if (!p.drag && dur < 1000) tap(e.clientX, e.clientY);
   }
 
-  document.addEventListener('pointerdown', onDown, { passive: false });
-  document.addEventListener('pointermove', onMove, { passive: false });
-  document.addEventListener('pointerup', onUp);
-  document.addEventListener('pointercancel', onUp);
-  document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
-  
-  // iOS needs user gesture directly bound to document for AudioContext and DeviceOrientation
-  document.addEventListener('touchend', function(){ unlockAudio(); if (!started) begin(); }, {passive:true, once:true});
-  document.addEventListener('click', function(){ unlockAudio(); if (!started) begin(); }, {passive:true, once:true});
+  canvas.addEventListener('pointerdown', onDown, { passive: false });
+  canvas.addEventListener('pointermove', onMove, { passive: false });
+  canvas.addEventListener('pointerup', onUp);
+  canvas.addEventListener('pointercancel', onUp);
+  canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
 
-  document.addEventListener('touchmove', function (e) { if (e.cancelable) e.preventDefault(); }, { passive: false });
-  ['gesturestart', 'gesturechange', 'gestureend', 'dblclick'].forEach(function(t){ document.addEventListener(t, function(e){e.preventDefault();}, {passive:false}); });
-
-  cardBtn.addEventListener('click', function (e) { e.stopPropagation(); lastUserAction = 0; unlockAudio(); releaseConstellation(); });
-  document.addEventListener('visibilitychange', function () {
-    if (!actx) return;
-    if (document.hidden) actx.suspend && actx.suspend().catch(function(){}); else { actx.resume && actx.resume().catch(function(){}); lastFrame = performance.now(); }
+  ['touchstart', 'touchend', 'click'].forEach(function (type) {
+    window.addEventListener(type, unlockAudio, { passive: true, capture: true });
   });
 
-  var rT = 0; window.addEventListener('resize', function(){ clearTimeout(rT); rT = setTimeout(resize, 120); });
-  window.addEventListener('orientationchange', function(){ clearTimeout(rT); rT = setTimeout(resize, 120); });
+  document.addEventListener('touchmove', function (e) {
+    if (e.cancelable) e.preventDefault();
+  }, { passive: false });
 
-  resize(); makeAppleIcon(); drawCardFlower();
-  requestAnimationFrame(function(now){ lastFrame = now; requestAnimationFrame(frame); });
+  ['gesturestart', 'gesturechange', 'gestureend', 'dblclick'].forEach(function (type) {
+    document.addEventListener(type, function (e) { e.preventDefault(); }, { passive: false });
+  });
+
+  cardBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    unlockAudio();
+    releaseConstellation();
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    if (!actx) return;
+    var pr;
+    if (document.hidden) pr = actx.suspend && actx.suspend();
+    else pr = actx.resume && actx.resume();
+    if (pr && pr.catch) pr.catch(function () {});
+    lastFrame = performance.now();
+  });
+
+  var resizeTimer = 0;
+  function scheduleResize() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 120);
+  }
+  window.addEventListener('resize', scheduleResize);
+  window.addEventListener('orientationchange', scheduleResize);
+
+  resize();
+  makeAppleIcon();
+  drawCardFlower();
+  requestAnimationFrame(function (now) {
+    lastFrame = now;
+    requestAnimationFrame(frame);
+  });
 })();
 </script>
 </body>
